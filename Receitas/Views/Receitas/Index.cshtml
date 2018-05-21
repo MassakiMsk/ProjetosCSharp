@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ProjetoM2.Models.Receita>
+<script src="~/Scripts/Receitas.js"></script>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-6" style="overflow:auto; max-height: 70vh; border: solid; border-color: rgba(0,0,0,0.6); box-sizing: border-box;">
+        <h2>Receitas</h2>
+        <hr />
+        <p>
+            @Html.ActionLink("Criar Receita", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th>
+                    Preço
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="btn_receita" id="@item.Id" href="#">@Html.DisplayFor(modelItem => item.Nome)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Preco)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Detalhar", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Deletar", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <div class="col-md-6" style="overflow:auto; max-height: 70vh; border: solid; border-color: rgba(0,0,0,0.6) ; box-sizing: border-box;">
+        <h2>Descrição</h2>
+        <hr />
+        <p id="desc"></p>
+    </div>
+
+</div>
+@section Scripts{
+    <script>
+        function clicou(e) {
+            $.ajax({
+                type: "POST",
+                url: '/Receitas/Descreve',
+                data: { id: e },
+                success: function (result) {
+                    $("#desc").html(result.resultado);     
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+
+        $('.btn_receita').click(function () {
+
+            var id = $(this).attr('id');
+            console.log(this);
+            console.log(id)
+            clicou(id);
+        });
+    </script>
+    }
